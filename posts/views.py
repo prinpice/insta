@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import PostModelForm
+from .models import Post
 
 # Create your views here.
 def create(request):
@@ -8,12 +9,16 @@ def create(request):
         form = PostModelForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('posts:create')
+            return redirect('posts:list')
         
     else: # GET
         # post를 작성하는 form을 보여줌
         form = PostModelForm()
         return render(request, 'posts/create.html', {'form': form})
         
-
+def list(request):
+    # 모든 Post를 보여줌
+    posts = Post.objects.all()
+    
+    return render(request, 'posts/list.html', {'posts': posts})
     
