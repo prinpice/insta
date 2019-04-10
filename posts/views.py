@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import PostModelForm
 from .models import Post
+from django.views.decorators.http import require_POST
 
 # Create your views here.
 def create(request):
@@ -22,6 +23,7 @@ def list(request):
     
     return render(request, 'posts/list.html', {'posts': posts})
     
+# @require_POST # Post로 보냈을 때만 허용해줌
 def delete(request, post_id):
     post = Post.objects.get(id=post_id)
     post.delete()
