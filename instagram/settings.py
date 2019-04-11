@@ -120,3 +120,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# image를 저장할 url
+# media 파일들이 불릴 url
+MEDIA_URL = '/media/'
+# 실제 저장 장소
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

@@ -11,5 +11,6 @@ class PostModelForm(forms.ModelForm):
     # 2. 해당 input 필드의 속성을 추가 & 어떤 모델을 조작할지
     class Meta:
         model = Post
-        fields = ['content'] # 사용자가 직접 입력하는 필드만 폼에 추가
+        fields = ['content', 'image'] # 사용자가 직접 입력하는 필드만 폼에 추가
         # "__all__" : 가지고 있는 모든 column이 다 나옴
+        # field에 image 추가하면 파일 추가하는 기능이 페이지에 추가됨
