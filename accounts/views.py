@@ -1,9 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.decorators import login_required
-
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
 # Create your views here.
 def login(request):
@@ -27,4 +25,18 @@ def login(request):
 def logout(request):
     auth_logout(request)
     return redirect('posts:list')
+    
+def signup(request):
+    if request.method == "POST":
+        # POST : 유저 등록
+        form = UserCreationForm(request.POST) # request.POST는 dictionary로 되어있다.
+        if form.is_valid():
+            user = form.save()
+            auth_login(request, user) # request.POST 사용해도 됨
+            return redirect('posts:lists')
+    else:
+        # GET : 유저 정보 입력
+        form = UserCreationForm()
+        
+    return render(request, 'accounts/signup.html', { 'form' : form })
     
