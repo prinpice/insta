@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import PostModelForm
 from .models import Post
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def create(request):
@@ -46,6 +47,7 @@ def update(request, post_id):
         form = PostModelForm(instance=post)
         return render(request, 'posts/update.html', {'form':form})
     
+@login_required # login을 했을때 사용가능하도록 지정
 def like(request, post_id):
     # like를 추가할 post를 가져옴
     post = get_object_or_404(Post, id=post_id)
@@ -59,4 +61,4 @@ def like(request, post_id):
         post.like_users.remove(request.user)
     else:
         post.like_users.add(request.user)
-    return redirect('post:list')
+    return redirect('posts:list')
