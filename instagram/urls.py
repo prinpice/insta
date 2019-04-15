@@ -23,6 +23,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path( 'posts/', include('posts.urls')),
+    path( 'accounts/', include('accounts.urls')),
 ]
 # urls.py는 whitelisting으로 직집 추가하지 않으면 동작하지 않음
 # urlpatterns += staic(통과시키고자 하는 url, 실제 저장 장소)

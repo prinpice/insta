@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'posts',
     'bootstrap4',
     'django_extensions',
+    'accounts', # login기능이 포함된 앱 이름이 accounts가 아닐 경우에는 url을 settings에서 지정해줘야 한다.
 ]
 
 MIDDLEWARE = [

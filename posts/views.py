@@ -10,7 +10,9 @@ def create(request):
         # 작성된 post(글)를 DB에 적용
         form = PostModelForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            post = form.save(commit=False)
+            post.user = request.user
+            post.save()
             return redirect('posts:list')
         
     else: # GET
