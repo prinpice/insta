@@ -7,7 +7,7 @@ from django.views.decorators.http import require_POST
 def create(request):
     if request.method == "POST":
         # 작성된 post(글)를 DB에 적용
-        form = PostModelForm(request.POST)
+        form = PostModelForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('posts:list')
@@ -46,4 +46,17 @@ def update(request, post_id):
         form = PostModelForm(instance=post)
         return render(request, 'posts/update.html', {'form':form})
     
+def like(request, post_id):
+    # like를 추가할 post를 가져옴
+    post = get_object_or_404(Post, id=post_id)
+    # post = Post.objects.get(id=post_id)
     
+    # 2. 만약 유저가 해당 post를 이미 like 했다면,
+    #       like를 제거하고,
+    #   아니면,
+    #       like를 추가한다.
+    if request.user in post.like_users.all():
+        post.like_users.remove(request.user)
+    else:
+        post.like_users.add(request.user)
+    return redirect('post:list')

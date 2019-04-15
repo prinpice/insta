@@ -9,6 +9,7 @@ class Post(models.Model):
     image = models.ImageField(blank=True) # 업로드 된 파일이 들어오면 1. 특정위치에 넣고, 2. 주소값을 저장한다.
     # user = models.ForeignKey(User, on_delete=models.CASCADE) # 이전코드(직접적)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) # 1:N
+    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="like_posts", blank=True)
     
     def __str__(self):
         return self.content
