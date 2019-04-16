@@ -71,7 +71,7 @@ def like(request, post_id):
     
 
 # 먼저 불리는 것을 위에 작성함
-@login_required
+@login_required # 로그인 안한 경우 로그인 창으로 넘어감
 @require_POST
 def comment_create(request, post_id):
     # Comment를 만드는 로직
