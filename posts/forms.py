@@ -1,5 +1,5 @@
 from django import forms
-from .models import Post
+from .models import Post, Comment
 
 # Post라는 모델을 조작할 수 있는 PostModelForm(또는 PostForm) 정의
 class PostModelForm(forms.ModelForm):
@@ -14,3 +14,9 @@ class PostModelForm(forms.ModelForm):
         fields = ['content', 'image'] # 사용자가 직접 입력하는 필드만 폼에 추가
         # "__all__" : 가지고 있는 모든 column이 다 나옴
         # field에 image 추가하면 파일 추가하는 기능이 페이지에 추가됨
+        
+class CommentModelForm(forms.ModelForm):
+    
+    class Meta:
+        model = Comment
+        fields = ['content',]

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import PostModelForm
-from .models import Post
+from .forms import PostModelForm, CommentModelForm
+from .models import Post, Comment
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 
@@ -24,7 +24,11 @@ def list(request):
     # 모든 Post를 보여줌
     posts = Post.objects.all()
     
-    return render(request, 'posts/list.html', {'posts': posts})
+    # Comment를 작성하는 form을 보여줌
+    
+    comment_form = CommentModelForm()
+    
+    return render(request, 'posts/list.html', {'posts': posts, 'comment_form' : comment_form})
     
 # @require_POST # Post로 보냈을 때만 허용해줌
 def delete(request, post_id):
@@ -63,4 +67,28 @@ def like(request, post_id):
         post.like_users.remove(request.user)
     else:
         post.like_users.add(request.user)
+    return redirect('posts:list')
+    
+
+# 먼저 불리는 것을 위에 작성함
+@login_required
+@require_POST
+def comment_create(request, post_id):
+    # Comment를 만드는 로직
+    # !! post = get_object_or_404(Post, pk=post_id) # 이런 방식으로 저장도 가능하지만 가능한 (직접적인 방식은) 사용하지 않는다
+    form = CommentModelForm(request.POST) # 요청방식(GET/POST)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.user = request.user
+        comment.post_id = post_id
+        # !! comment.post = post 
+        comment.save()
+    return redirect('posts:list')
+    
+@login_required
+def comment_delete(request, comment_id):
+    comment = Comment.objects.get(id=comment_id)
+    if comment.user != request.user:
+        return redirect('posts:list')
+    comment.delete()
     return redirect('posts:list')
