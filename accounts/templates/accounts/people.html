@@ -4,6 +4,8 @@
 <div class="container">
 
   <h1>{{ people.username }}</h1>
+  <p><strong>{{ people.profile.nickname }}</strong></p>
+  <p>{{ people.profile.description }}</p>
   <p>{{people.last_name}}{{people.first_name}}</p>
   <!--templates에서는 request.user를 user라고 작성해도 된다.-->
   <!--people을 print하면 string이 나오기 때문에 people.username 안쓰고 그대로 써줘도 된다.-->

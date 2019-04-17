@@ -20,8 +20,10 @@ from django.conf import settings # 다른 요약된 클래스의 객체 등을 �
 # django.conf : 모든 환경설정 접근가능 # 파일에 직접들어가지 않고 접근하는 함수, 객체, 방법을 만들어 파일을 직접 조작하지 못하게 한다.
 from django.conf.urls.static import static
 from accounts import views as accounts_views
+from posts import views as posts_views
 
 urlpatterns = [
+    path('', posts_views.list, name="root"),
     path('admin/', admin.site.urls),
     path( 'posts/', include('posts.urls')),
     path( 'accounts/', include('accounts.urls')),
