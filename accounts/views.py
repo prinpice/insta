@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm, PasswordChangeForm
-from .forms import CustomUserChangeForm
+from .forms import CustomUserChangeForm, CustomUserCreationForm
 from .forms import ProfileForm
 from django.contrib.auth import get_user_model, update_session_auth_hash
 from .models import Profile
@@ -28,12 +28,13 @@ def login(request):
         
 def logout(request):
     auth_logout(request)
-    return redirect('posts:list')
+    return redirect('accounts:login')
     
 def signup(request):
     if request.method == "POST":
         # POST : 유저 등록
-        form = UserCreationForm(request.POST) # request.POST는 dictionary로 되어있다.
+        # form = UserCreationForm(request.POST) # request.POST는 dictionary로 되어있다.
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             # 1:N 생성과 유사
@@ -45,7 +46,8 @@ def signup(request):
             return redirect('posts:list')
     else:
         # GET : 유저 정보 입력
-        form = UserCreationForm()
+        # form = UserCreationForm()
+        form = CustomUserCreationForm()
         
     return render(request, 'accounts/signup.html', { 'form' : form })
     
@@ -109,3 +111,16 @@ def password(request):
             
         }
         return render(request, 'accounts/password.html', context)
+        
+def follow(request, user_id): # user_id : to
+    person = get_object_or_404(get_user_model(), pk=user_id) # 내가 팔로우 하고자 하는 사람
+    
+    # 만약 현재 유저가 해당 유저를 이미 팔로우하고 있었으면,
+    if person in request.user.followings.all(): # 내가 person의 팔로워들 중에 있으면
+        #   ---> 팔로우 취소
+        request.user.followings.remove(person)
+        # 아니면,
+    else:
+        #   ---> 팔로우
+        request.user.followings.add(person)
+    return redirect('people', person.username)

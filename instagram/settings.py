@@ -128,3 +128,7 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 # 실제 저장 장소
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# 오버라이드(재정의)
+# 사용하고자 하는 모든 유저를 accounts에 있는 유저로 바꾼다.
+AUTH_USER_MODEL = "accounts.User"

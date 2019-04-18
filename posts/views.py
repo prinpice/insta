@@ -3,6 +3,7 @@ from .forms import PostModelForm, CommentModelForm
 from .models import Post, Comment
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 # Create your views here.
 def create(request):
@@ -20,9 +21,23 @@ def create(request):
         form = PostModelForm()
         return render(request, 'posts/create.html', {'form': form})
         
+@login_required
 def list(request):
-    # 모든 Post를 보여줌
-    posts = Post.objects.all()
+    # # 모든 Post를 보여줌
+    # posts = Post.objects.all()
+    
+    
+    # # 1. 내가 팔로우 한 사람들의 Post만 보여줌
+    # posts = Post.objects.filter(user_id__in=request.user.followings.all())
+    
+    # # 2. (1) + 내가 작성한 Post도 보여줌
+    # my_posts = request.user.post_set.all() # related_name을 하지 않아서 post_set 사용
+    # posts.extends(my_posts) # Query 2개 작동
+    # # list(posts) += list(my_posts) # list를 사용하여 query하나만 사용가능 but 여기서 함수이름과 동일하여 작동하지 않음
+    
+    # print(posts.query) # posts에 들어간 Query 보기
+    
+    posts = Post.objects.filter(Q(user_id__in=request.user.followings.all()) | Q(user_id=request.user))
     
     # Comment를 작성하는 form을 보여줌
     

@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">
+  <a class="navbar-brand" href="{% url 'root' %}">
     <i class="fab fa-instagram"></i>
     Instagram
   </a>
@@ -13,6 +13,9 @@
       {% if user.is_authenticated %}
       <li class="nav-item">
         <a class="nav-link" href="{% url 'people' user.username %}" tabindex="-1" aria-disabled="true">{{ user.username }}</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'posts:create' %}">새글쓰기</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{% url 'accounts:logout' %}">로그아웃</a>
