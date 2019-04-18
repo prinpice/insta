@@ -64,7 +64,7 @@ def update(request):
     if request.method == "POST":
         user_change_form = CustomUserChangeForm(request.POST, instance=request.user)
         # profile_form = ProfileForm(request.POST, instance=request.user)
-        profile_form = ProfileForm(request.POST, instance=request.user.profile) # data key argument를 사용하면 순서 상관없이 입력 가능
+        profile_form = ProfileForm(request.POST, instance=request.user.profile, files=request.FILES) # data key argument를 사용하면 순서 상관없이 입력 가능
         if user_change_form.is_valid() and profile_form.is_valid():
             user = user_change_form.save()
             profile_form.save()

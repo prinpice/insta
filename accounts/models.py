@@ -8,6 +8,7 @@ class Profile(models.Model):
     # 하나만 사용할 수 있도록 관계맺고 싶을때
     # user = models.OneToOneField(가리키는 모델명, 옵션...)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    image = models.ImageField(blank=True)
     description = models.TextField(blank=True)
     nickname = models.CharField(max_length=40, blank=True)
     
