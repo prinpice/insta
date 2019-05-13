@@ -60,7 +60,7 @@ def update(request, post_id):
     if post.user != request.user:
         return redirect('posts:list')
     if request.method == "POST":
-        form = PostModelForm(request.POST, instance=post)
+        form = PostModelForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             form.save()
             return redirect('posts:list')

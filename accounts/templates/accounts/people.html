@@ -33,7 +33,40 @@
   <div class="row">
     {% for post in people.post_set.all %}
     <div class="col-4">
-      <img src="{{ post.image.url }}" class="img-fluid">
+      <div class="card">
+        <img src="{{ post.image.url }}" class="img-fluid">
+        <div class="card-body">
+          <p class="card-text">{{ post.content }}</p>
+        </div>
+        <div class="card-body">
+          <a href="{% url 'posts:like' post.id %}">
+            <!-- 해당 유저가 like를 했으면, -->
+            {% if user in post.like_users.all %}
+            <!-- user에 request.user 써도 됨-->
+            <i class="fas fa-heart"></i>
+            <!-- 아니면, -->
+            {% else %}
+            <i class="far fa-heart"></i>
+            {% endif %}
+          </a>
+          <p class="card-text">
+            {{ post.like_users.count }}명이 좋아합니다.
+          </p>
+        </div>
+        <!-- 해당 글에 작성된 댓글을 모두 출력 -->
+        <div class="card-body">
+          {% for comment in post.comment_set.all %}
+            <div class="card-text">
+              <strong>{{ comment.user.username }}</strong> {{ comment.content }}
+              {% if comment.user == request.user %}
+                <a href="{% url 'posts:comment_delete' comment.id %}" class="btn btn-danger">삭제</a>
+              {% endif %}
+            </div>
+            {% empty %}
+            <div>댓글이 없습니다.</div>
+          {% endfor %}
+        </div>
+      </div>
     </div>
     {% endfor %}
   </div>
