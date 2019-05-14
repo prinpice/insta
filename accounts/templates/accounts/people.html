@@ -17,7 +17,12 @@
     {% endif %}
   {% endif %}
   </h1>
-  
+  <div id="app">
+    <!-- vue js로 동작하는 버튼 -->
+    <button v-show="loading" @click="follow({{ people.id }})" :class="{'btn': true, 'btn-primary': !followed, 'btn-dark': followed }">Vue 팔로우</button>
+    <p>[[ test ]]</p>
+    <p>팔로우 여부 : [[ followed ]]</p>
+  </div>
   
   <p><strong>{{ people.profile.nickname }}</strong></p>
   <p>{{ people.profile.description }}</p>
@@ -71,4 +76,43 @@
     {% endfor %}
   </div>
 </div>
+
+<script>
+  const app = new Vue({
+    delimiters: ['[[',']]'], // 구분자 : 기존 구분자가 django template과 겹쳐서 django가 변수로 인식하여 출력하지 않음
+    el: '#app',
+    data: {
+      test: '뷰 잘 동작하니?',
+      followed: '', // true여도 시작할때 빈 string이기 때문에 초기 값이 false이다.
+      loading: false,
+    },
+    methods: {
+      follow: function(person_id) {
+        axios.get(`/accounts/${person_id}/vuefollow/`)
+        .then((res)=>{
+          // console.log(res.data)
+          return res.data
+        })
+        .then((data)=>{
+          this.followed = data.followed
+        })
+        console.log("팔로우 했다리")
+      },
+      checkfollow: function(person_id){
+        axios.get(`/accounts/${person_id}/checkfollow/`)
+        .then((res)=>{
+          return res.data
+        })
+        .then((data)=>{
+          this.followed = data.followed
+          this.loading = true
+        })
+      },
+    },
+    beforeMount: function() {//vue의 property
+        //vue가 생성되기전에 실행되는 동작들
+        this.checkfollow({{ people.id }}) // dtl은 block안의 모든 곳에서 적용이 된다.
+      }
+  })
+</script>
 {% endblock %}
